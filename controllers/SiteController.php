@@ -9,6 +9,7 @@ use yii\web\Response;
 use yii\filters\VerbFilter;
 use app\models\LoginForm;
 use app\models\ContactForm;
+use app\models\EntryForm;
 
 class SiteController extends Controller
 {
@@ -124,5 +125,26 @@ class SiteController extends Controller
     public function actionAbout()
     {
         return $this->render('about');
+    }
+
+    // home - is action name that will be called when we go to such url 
+    public function actionHome($message = 'Привет')
+    {
+        // finds View in site folder by name = 'Home'
+        return $this->render('home', ['message' => $message]);
+    }
+
+    public function actionEntry()
+    {
+        $model = new EntryForm();
+
+        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
+            return $this->render('entry-confirm', ['model' => $model]);
+        } else {
+            echo '<pre>'; print_r(Yii::$app->request->post('name')); echo '</pre>';
+
+
+            return $this->render('entry', ['model' => $model]);
+        }
     }
 }
